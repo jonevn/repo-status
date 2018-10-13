@@ -60,7 +60,7 @@ public class GitRepoStatus {
 		modifiedFiles.stream()
 				.forEach(modified -> sb.append(Color.CYAN_FG.colorize("\nM  ") + Color.RED_FG.colorize(modified)));
 		untrackedFiles.stream().forEach(
-				untracked -> sb.append(Color.MAGENTA_BG.colorize("\n??  ") + Color.RED_FG.colorize(untracked)));
+				untracked -> sb.append(Color.MAGENTA_FG.colorize("\n??  ") + Color.RED_FG.colorize(untracked)));
 		addedFiles.stream().forEach(added -> sb.append("\nA  " + Color.RED_FG.colorize(added)));
 		changedFiles.stream().forEach(changed -> sb.append("\nC  " + Color.RED_FG.colorize(changed)));
 		removedFiles.stream().forEach(removed -> sb.append("\nR  " + Color.RED_FG.colorize(removed)));
