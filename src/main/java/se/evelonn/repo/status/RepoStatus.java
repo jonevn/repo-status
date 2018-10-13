@@ -9,6 +9,7 @@ import java.util.function.Function;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.Status;
 import org.eclipse.jgit.api.StatusCommand;
+import org.eclipse.jgit.lib.BranchTrackingStatus;
 
 public class RepoStatus {
 
@@ -22,8 +23,8 @@ public class RepoStatus {
 
 		DirectoryStream<Path> directoryStream = Files.newDirectoryStream(baseDirectory);
 		directoryStream.forEach(path -> {
-			if (path.toFile().isDirectory() && path.resolve(".git").toFile().exists()) {
-				System.out.println(toGitRepoStatus);
+			if (path.toFile().isDirectory() && Paths.get(path.toFile().getAbsolutePath(), ".git").toFile().exists()) {
+				System.out.println(toGitRepoStatus.apply(path));
 			}
 		});
 	}
@@ -32,16 +33,26 @@ public class RepoStatus {
 		try {
 			Git git = Git.open(path.toFile());
 			// Performing fetch
-			git.fetch().call();
+			// git.fetch().call();
 
-			git.getRepository().getRepositoryState();
 			StatusCommand status = git.status();
 			Status statusCall = status.call();
 
+			BranchTrackingStatus branchTrackingStatus = BranchTrackingStatus.of(git.getRepository(),
+					git.getRepository().getBranch());
+
 			return GitRepoStatus.builder() //
-					.repoName("") //
-					.branchName(git.getRepository().getFullBranch()) //
-					.stateDescription(git.getRepository().getRepositoryState().getDescription()) //
+					.repoName(path.toFile().getName()) //
+					.branchName(git.getRepository().getBranch()) //
+					.remoteBranch(branchTrackingStatus.getRemoteTrackingBranch().replaceAll("refs/remotes/", "")) //
+					.ahead(branchTrackingStatus.getAheadCount()) //
+					.behind(branchTrackingStatus.getBehindCount()) //
+					.addedFiles(statusCall.getAdded()) //
+					.changedFiles(statusCall.getChanged()) //
+					.missingFiles(statusCall.getMissing()) //
+					.modifiedFiles(statusCall.getModified()) //
+					.removedFiles(statusCall.getRemoved()) //
+					.untrackedFiles(statusCall.getUntracked()) //
 					.build();
 
 		} catch (Exception e) {
