@@ -23,7 +23,7 @@ public class RepoStatus {
 
 		DirectoryStream<Path> directoryStream = Files.newDirectoryStream(baseDirectory);
 		directoryStream.forEach(path -> {
-			if (path.toFile().isDirectory() && Paths.get(path.toFile().getAbsolutePath(), ".git").toFile().exists()) {
+			if (path.toFile().isDirectory() && path.resolve(".git").toFile().exists()) {
 				System.out.println(toGitRepoStatus.apply(path));
 			}
 		});
@@ -32,8 +32,6 @@ public class RepoStatus {
 	private static Function<Path, GitRepoStatus> toGitRepoStatus = (path) -> {
 		try {
 			Git git = Git.open(path.toFile());
-			// Performing fetch
-			// git.fetch().call();
 
 			StatusCommand status = git.status();
 			Status statusCall = status.call();
