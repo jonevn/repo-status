@@ -44,13 +44,16 @@
 							</resources>
 						</transformer>
 					</transformers>
-					<artifactSet>
-						<excludes>
-							<exclude>META-INF/*.RSA</exclude>
-							<exclude>META-INF/*.SF</exclude>
-							<exclude>META-INF/*.MF</exclude>
-						</excludes>
-					</artifactSet>
+					<filters>
+						<filter>
+							<artifact>org.eclipse.jgit:org.eclipse.jgit</artifact>
+							<excludes>
+								<exclude>META-INF/*.RSA</exclude>
+								<exclude>META-INF/*.SF</exclude>
+								<exclude>META-INF/*.MF</exclude>
+							</excludes>
+						</filter>
+					</filters>
 				</configuration>
 				<executions>
 					<execution>
