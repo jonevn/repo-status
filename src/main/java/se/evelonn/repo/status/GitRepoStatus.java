@@ -48,7 +48,7 @@ public class GitRepoStatus {
 	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
-		sb.append(String.format("%-20s %-10s", Color.RED_FG.colorize(repoName), Color.BLUE_FG.colorize(branchName))
+		sb.append(String.format("%-40s %-20s", Color.RED_FG.colorize(repoName), Color.BLUE_FG.colorize(branchName))
 				+ "\t");
 		if (remoteBranch != null && !remoteBranch.isEmpty()) {
 			sb.append(Color.GREEN_FG.colorize(remoteBranch));
