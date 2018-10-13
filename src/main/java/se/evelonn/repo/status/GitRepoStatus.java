@@ -48,22 +48,21 @@ public class GitRepoStatus {
 	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
-		sb.append(
-				String.format("%-40s %s", Color.RED_FG.colorize(repoName), Color.BLUE_FG.colorize(branchName)) + "\t");
+		sb.append(String.format("%-40s %s", Color.BLUE_FG.colorize(repoName), Color.GREEN_FG.colorize(branchName)));
 		if (remoteBranch != null && !remoteBranch.isEmpty()) {
-			sb.append(Color.BLUE_FG.colorize("-->" + remoteBranch));
+			sb.append(Color.GREEN_FG.colorize(" --> " + remoteBranch));
 			if (ahead > 0) {
 				sb.append(Color.YELLOW_FG.colorize(" ( ahead " + ahead + " )"));
 			} else if (behind > 0) {
 				sb.append(Color.YELLOW_FG.colorize(" ( behind " + behind + " )"));
 			}
 		}
-		addedFiles.stream().forEach(added -> sb.append("\nA  " + added));
-		changedFiles.stream().forEach(changed -> sb.append("\nC  " + changed));
-		removedFiles.stream().forEach(removed -> sb.append("\nR  " + removed));
-		untrackedFiles.stream().forEach(untracked -> sb.append("\nU  " + untracked));
-		modifiedFiles.stream().forEach(modified -> sb.append("\nM  " + modified));
-		missingFiles.stream().forEach(missing -> sb.append("\n-  " + missing));
+		addedFiles.stream().forEach(added -> sb.append("\nA  " + Color.RED_FG.colorize(added)));
+		changedFiles.stream().forEach(changed -> sb.append("\nC  " + Color.RED_FG.colorize(changed)));
+		removedFiles.stream().forEach(removed -> sb.append("\nR  " + Color.RED_FG.colorize(removed)));
+		untrackedFiles.stream().forEach(untracked -> sb.append("\nU  " + Color.RED_FG.colorize(untracked)));
+		modifiedFiles.stream().forEach(modified -> sb.append("\nM  " + Color.RED_FG.colorize(modified)));
+		missingFiles.stream().forEach(missing -> sb.append("\n-  " + Color.RED_FG.colorize(missing)));
 		return sb.toString();
 	}
 
