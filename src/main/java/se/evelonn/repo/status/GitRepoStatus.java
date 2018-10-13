@@ -48,13 +48,14 @@ public class GitRepoStatus {
 	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
-		sb.append(String.format("%-20s %-10s", repoName, branchName) + "\t");
+		sb.append(String.format("%-20s %-10s", Color.RED_FG.colorize(repoName), Color.BLUE_FG.colorize(branchName))
+				+ "\t");
 		if (remoteBranch != null && !remoteBranch.isEmpty()) {
-			sb.append(remoteBranch);
+			sb.append(Color.GREEN_FG.colorize(remoteBranch));
 			if (ahead > 0) {
-				sb.append(" ( ahead " + ahead + " )");
+				sb.append(Color.YELLOW_FG.colorize(" ( ahead " + ahead + " )"));
 			} else if (behind > 0) {
-				sb.append(" ( behind " + behind + " )");
+				sb.append(Color.YELLOW_FG.colorize(" ( behind " + behind + " )"));
 			}
 		}
 		addedFiles.stream().forEach(added -> sb.append("\n\tA  " + added));
@@ -145,7 +146,7 @@ public class GitRepoStatus {
 
 		@Override
 		public BranchName repoName(String repoName) {
-			this.repoName = (char) 27 + "[31m" + repoName + (char) 27 + "[0m";
+			this.repoName = repoName;
 			return this;
 		}
 
