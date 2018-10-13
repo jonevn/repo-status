@@ -48,7 +48,7 @@ public class GitRepoStatus {
 	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
-		sb.append(String.format("%-20s %-10s", repoName, branchName) + "\t");
+		sb.append(String.format("\\033[0;31m%-20s\\033[0m %-10s", repoName, branchName) + "\t");
 		if (remoteBranch != null && !remoteBranch.isEmpty()) {
 			sb.append(remoteBranch);
 			if (ahead > 0) {
