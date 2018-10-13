@@ -57,11 +57,13 @@ public class GitRepoStatus {
 				sb.append(Color.YELLOW_FG.colorize(" ( behind " + behind + " )"));
 			}
 		}
+		modifiedFiles.stream()
+				.forEach(modified -> sb.append(Color.CYAN_FG.colorize("\nM  ") + Color.RED_FG.colorize(modified)));
+		untrackedFiles.stream().forEach(
+				untracked -> sb.append(Color.MAGENTA_BG.colorize("\n??  ") + Color.RED_FG.colorize(untracked)));
 		addedFiles.stream().forEach(added -> sb.append("\nA  " + Color.RED_FG.colorize(added)));
 		changedFiles.stream().forEach(changed -> sb.append("\nC  " + Color.RED_FG.colorize(changed)));
 		removedFiles.stream().forEach(removed -> sb.append("\nR  " + Color.RED_FG.colorize(removed)));
-		untrackedFiles.stream().forEach(untracked -> sb.append("\nU  " + Color.RED_FG.colorize(untracked)));
-		modifiedFiles.stream().forEach(modified -> sb.append("\nM  " + Color.RED_FG.colorize(modified)));
 		missingFiles.stream().forEach(missing -> sb.append("\n-  " + Color.RED_FG.colorize(missing)));
 		return sb.toString();
 	}
