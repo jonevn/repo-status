@@ -4,6 +4,7 @@ import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.*;
 import java.util.function.Function;
 
 import org.eclipse.jgit.api.Git;
@@ -22,11 +23,17 @@ public class RepoStatus {
 		}
 
 		DirectoryStream<Path> directoryStream = Files.newDirectoryStream(baseDirectory);
+
+		List<Path> directories = new ArrayList<>();
 		directoryStream.forEach(path -> {
 			if (path.toFile().isDirectory() && path.resolve(".git").toFile().exists()) {
-				System.out.println(toGitRepoStatus.apply(path));
+				directories.add(path);
+
 			}
 		});
+
+		directories.stream().sorted(Comparator.naturalOrder()).forEach(path -> System.out.println(toGitRepoStatus.apply(path)));
+
 	}
 
 	private static Function<Path, GitRepoStatus> toGitRepoStatus = (path) -> {
@@ -42,9 +49,9 @@ public class RepoStatus {
 			return GitRepoStatus.builder() //
 					.repoName(path.toFile().getName()) //
 					.branchName(git.getRepository().getBranch()) //
-					.remoteBranch(branchTrackingStatus.getRemoteTrackingBranch().replaceAll("refs/remotes/", "")) //
-					.ahead(branchTrackingStatus.getAheadCount()) //
-					.behind(branchTrackingStatus.getBehindCount()) //
+					.remoteBranch(branchTrackingStatus == null ? "" : branchTrackingStatus.getRemoteTrackingBranch().replaceAll("refs/remotes/", "")) //
+					.ahead(branchTrackingStatus == null ? 0 : branchTrackingStatus.getAheadCount()) //
+					.behind(branchTrackingStatus == null ? 0 : branchTrackingStatus.getBehindCount()) //
 					.addedFiles(statusCall.getAdded()) //
 					.changedFiles(statusCall.getChanged()) //
 					.missingFiles(statusCall.getMissing()) //
